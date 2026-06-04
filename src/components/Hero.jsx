@@ -147,7 +147,7 @@ export default function Hero() {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       style={heroStyle}
-      className="relative overflow-hidden text-white py-32 md:py-40 px-4 text-center"
+      className="relative overflow-hidden text-white pt-52 pb-32 md:pt-56 md:pb-40 px-4 text-center"
     >
       {/* Ambient orbs — colors pulled from palette */}
       <div

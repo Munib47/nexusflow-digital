@@ -79,7 +79,7 @@ function AdvantagesSection() {
 
   return (
     <section
-      id="matrix"
+      id="pricing"
       ref={sectionRef}
       className="py-28 px-4 border-y"
       style={{
@@ -203,7 +203,9 @@ export default function App() {
       <FAQ />
 
       {/* 11. Quote form — conversion */}
-      <QuoteForm />
+      <section id="contact">
+        <QuoteForm />
+      </section>
 
       {/* 12. Footer */}
       <Footer />

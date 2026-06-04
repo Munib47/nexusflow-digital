@@ -83,7 +83,11 @@ export default function ProcessPipeline() {
         <div ref={titleRef} className="mb-16 max-w-xl">
           <span className="text-xs font-bold tracking-widest text-indigo-400 uppercase">How It Works</span>
           <h2 className="text-3xl font-black tracking-tight mt-2 text-white sm:text-4xl">
-            From Brief to Revenue in 4 Steps
+            From Brief to{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-sky-400">
+              Revenue
+            </span>{' '}
+            in 4 Steps
           </h2>
           <p className="mt-3 text-slate-400 leading-relaxed">
             A streamlined delivery process built to get you results fast — without the back-and-forth of a typical agency engagement.

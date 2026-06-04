@@ -28,3 +28,22 @@ body {
 .animate-shimmer {
   animation: shimmer 2.5s ease infinite;
 }
+
+/* ── Swiper portfolio overrides ───────────────────────── */
+.portfolio-pagination .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #cbd5e1;
+  opacity: 1;
+  transition: all 0.3s;
+}
+
+.portfolio-pagination .swiper-pagination-bullet-active {
+  background: #6366f1;
+  width: 24px;
+  border-radius: 4px;
+}
+
+.swiper-slide {
+  height: auto;
+}

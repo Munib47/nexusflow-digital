@@ -1,16 +1,26 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import MetricsBar from './components/MetricsBar';
-import Services from './components/Services';
-import Testimonials from './components/Testimonials';
+
+import { themeConfig, cssGradient, textGradientStyle, themeBorder } from './config/themeConfig';
+
+import Navbar          from './components/Navbar';
+import Hero            from './components/Hero';
+import MetricsBar      from './components/MetricsBar';
+import Services        from './components/Services';
+import ClientGuide     from './components/ClientGuide';
+import Testimonials    from './components/Testimonials';
 import ProcessPipeline from './components/ProcessPipeline';
-import QuoteForm from './components/QuoteForm';
+import FAQ             from './components/FAQ';
+import PainPoints      from './components/PainPoints';
+import Portfolio       from './components/Portfolio';
+import QuoteForm       from './components/QuoteForm';
+import Footer          from './components/Footer';
+import CursorTrail     from './components/CursorTrail';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// ── Why NexusFlow advantages data ────────────────────────────────────────────
 const advantages = [
   {
     icon: (
@@ -19,7 +29,7 @@ const advantages = [
       </svg>
     ),
     title: 'No Hidden Fees',
-    desc: "Every proposal is itemized. You know exactly what you're paying for — development hours, ad spend, and deliverables — before you sign anything.",
+    desc:  "Every proposal is fully itemized. You see exactly what you're paying for — development hours, deliverables, and ad spend — before signing anything.",
   },
   {
     icon: (
@@ -28,7 +38,7 @@ const advantages = [
       </svg>
     ),
     title: 'Fast Execution',
-    desc: 'Most projects go live in 2–4 weeks. We move fast without cutting corners because we have pre-built systems for the most common digital challenges.',
+    desc:  'Most projects go live in 2–4 weeks. We move fast without cutting corners because we have pre-built systems for the most common digital challenges.',
   },
   {
     icon: (
@@ -37,27 +47,26 @@ const advantages = [
       </svg>
     ),
     title: 'ROI-First Thinking',
-    desc: 'Every decision — from your site architecture to your ad targeting — is evaluated through one lens: will this generate more revenue than it costs?',
+    desc:  'Every decision — from site architecture to ad targeting — is evaluated through one lens: will this generate more revenue than it costs?',
   },
 ];
 
+// ── Advantages / Why Us Section ───────────────────────────────────────────────
 function AdvantagesSection() {
   const sectionRef = useRef(null);
-  const titleRef = useRef(null);
-  const cardsRef = useRef(null);
+  const titleRef   = useRef(null);
+  const cardsRef   = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        titleRef.current,
+      gsap.fromTo(titleRef.current,
         { opacity: 0, y: 30 },
         {
           opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
           scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' },
         }
       );
-      gsap.fromTo(
-        cardsRef.current.children,
+      gsap.fromTo(cardsRef.current.children,
         { opacity: 0, y: 40 },
         {
           opacity: 1, y: 0, duration: 0.75, stagger: 0.13, ease: 'power3.out',
@@ -69,26 +78,74 @@ function AdvantagesSection() {
   }, []);
 
   return (
-    <section id="matrix" ref={sectionRef} className="py-28 px-4 bg-slate-100 border-y border-slate-200/60">
+    <section
+      id="matrix"
+      ref={sectionRef}
+      className="py-28 px-4 border-y"
+      style={{
+        background:  cssGradient(themeConfig.gradients.stripBg),
+        borderColor: themeConfig.colors.border,
+        fontFamily:  themeConfig.fonts.family,
+      }}
+    >
       <div className="max-w-6xl mx-auto">
+
+        {/* Header */}
         <div ref={titleRef} className="text-center mb-16">
-          <span className="text-xs font-bold tracking-widest text-indigo-600 uppercase">Why NexusFlow</span>
-          <h2 className="text-3xl font-extrabold text-slate-900 sm:text-4xl tracking-tight mt-2">
-            Transparent Pricing. Real Results.
+          <span
+            className={`${themeConfig.fonts.tailwind.eyebrow} font-bold tracking-widest uppercase`}
+            style={{ color: themeConfig.colors.primary }}
+          >
+            Why NexusFlow
+          </span>
+
+          <h2
+            className={`${themeConfig.fonts.tailwind.sectionHeading} font-extrabold tracking-tight mt-2`}
+            style={{ color: themeConfig.colors.headerText }}
+          >
+            Transparent Pricing.{' '}
+            <span style={textGradientStyle(themeConfig.gradients.brand)}>
+              Real Results.
+            </span>
           </h2>
-          <p className="mt-4 text-lg text-slate-600 max-w-xl mx-auto leading-relaxed">
-            We don't pad retainers or bill for strategy decks. Your budget goes directly into execution.
+
+          <p
+            className={`${themeConfig.fonts.tailwind.bodyLead} mt-4 max-w-xl mx-auto leading-relaxed`}
+            style={{ color: themeConfig.colors.bodyText }}
+          >
+            We don't pad retainers or bill for strategy decks. Your budget goes directly into execution that moves the needle.
           </p>
         </div>
 
+        {/* Cards */}
         <div ref={cardsRef} className="grid md:grid-cols-3 gap-8">
           {advantages.map((adv, i) => (
-            <div key={i} className="bg-white rounded-2xl p-8 border border-slate-200/70 shadow-sm">
-              <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mb-5">
+            <div
+              key={i}
+              className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300"
+              style={{ border: themeBorder('border') }}
+            >
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
+                style={{
+                  backgroundColor: `${themeConfig.colors.primary}14`,
+                  color:           themeConfig.colors.primary,
+                }}
+              >
                 {adv.icon}
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2">{adv.title}</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">{adv.desc}</p>
+              <h3
+                className={`${themeConfig.fonts.tailwind.cardTitle} font-bold mb-2`}
+                style={{ color: themeConfig.colors.headerText }}
+              >
+                {adv.title}
+              </h3>
+              <p
+                className="text-sm leading-relaxed"
+                style={{ color: themeConfig.colors.bodyText }}
+              >
+                {adv.desc}
+              </p>
             </div>
           ))}
         </div>
@@ -97,60 +154,59 @@ function AdvantagesSection() {
   );
 }
 
+// ── Root App ──────────────────────────────────────────────────────────────────
 export default function App() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans antialiased selection:bg-indigo-500 selection:text-white">
+    <div
+      className="min-h-screen antialiased selection:bg-indigo-500 selection:text-white"
+      style={{
+        backgroundColor: themeConfig.colors.background,
+        color:           themeConfig.colors.headerText,
+        fontFamily:      themeConfig.fonts.family,
+      }}
+    >
+      {/* Cursor trail — rendered at root so it covers the full viewport */}
+      <CursorTrail />
+
       <Navbar />
+
+      {/* 1. Hero — first impression */}
       <Hero />
+
+      {/* 2. Metrics — immediate credibility bar */}
       <MetricsBar />
+
+      {/* 3. Pain points — agitate before the pitch */}
+      <PainPoints />
+
+      {/* 4. Services — what we offer */}
       <Services />
-      <Testimonials />
+
+      {/* 5. Client guide — visitor self-identifies → tailored recommendation */}
+      <ClientGuide />
+
+      {/* 6. Testimonials — social proof */}
+      <section id="testimonials">
+        <Testimonials />
+      </section>
+
+      {/* 7. Process — how we work */}
       <ProcessPipeline />
+
+      {/* 8. Portfolio — real work showcase */}
+      <Portfolio />
+
+      {/* 9. Why Us — differentiation & pricing transparency */}
       <AdvantagesSection />
+
+      {/* 10. FAQ — remove objections */}
+      <FAQ />
+
+      {/* 11. Quote form — conversion */}
       <QuoteForm />
 
-      <footer className="bg-slate-950 text-slate-500 py-14 border-t border-slate-900">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-10 mb-10">
-            <div>
-              <span className="text-xl font-black tracking-tight text-indigo-400">
-                Nexus<span className="text-white">Flow</span>
-              </span>
-              <p className="mt-3 text-sm text-slate-500 leading-relaxed max-w-xs">
-                Full-service digital agency helping US brands scale through better web infrastructure and smarter advertising.
-              </p>
-            </div>
-            <div>
-              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Services</h4>
-              <ul className="space-y-2 text-sm text-slate-500">
-                <li><a href="#services" className="hover:text-white transition-colors">Web Development</a></li>
-                <li><a href="#services" className="hover:text-white transition-colors">Shopify Development</a></li>
-                <li><a href="#services" className="hover:text-white transition-colors">Meta & Google Ads</a></li>
-                <li><a href="#services" className="hover:text-white transition-colors">LinkedIn B2B Ads</a></li>
-                <li><a href="#services" className="hover:text-white transition-colors">CRO & Analytics</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Get In Touch</h4>
-              <ul className="space-y-2 text-sm text-slate-500">
-                <li>
-                  <a href="mailto:hello@nexusflow.io" className="hover:text-white transition-colors">
-                    hello@nexusflow.io
-                  </a>
-                </li>
-                <li>
-                  <a href="#quote-form" className="hover:text-white transition-colors">
-                    Request a Free Proposal →
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="pt-8 border-t border-slate-900 text-center text-xs text-slate-600">
-            &copy; {new Date().getFullYear()} NexusFlow Digital. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      {/* 12. Footer */}
+      <Footer />
     </div>
   );
 }

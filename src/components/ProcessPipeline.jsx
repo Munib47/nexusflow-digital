@@ -29,13 +29,11 @@ const steps = [
 
 export default function ProcessPipeline() {
   const containerRef = useRef(null);
-  const stepsRef = useRef(null);
-  const lineRef = useRef(null);
-  const titleRef = useRef(null);
+  const stepsRef     = useRef(null);
+  const titleRef     = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Title fade in
       gsap.fromTo(
         titleRef.current,
         { opacity: 0, y: 30 },
@@ -44,18 +42,6 @@ export default function ProcessPipeline() {
           scrollTrigger: { trigger: containerRef.current, start: 'top 78%' },
         }
       );
-
-      // Animated connecting line
-      gsap.fromTo(
-        lineRef.current,
-        { scaleX: 0 },
-        {
-          scaleX: 1, duration: 1.4, ease: 'power2.inOut',
-          scrollTrigger: { trigger: stepsRef.current, start: 'top 75%' },
-        }
-      );
-
-      // Steps staggered reveal
       gsap.fromTo(
         stepsRef.current.children,
         { opacity: 0, y: 40 },
@@ -65,21 +51,21 @@ export default function ProcessPipeline() {
         }
       );
     });
-
     return () => ctx.revert();
   }, []);
 
-  // Subtle hover lift on each step card
   const handleMouseEnter = (e) => {
-    gsap.to(e.currentTarget, { y: -6, borderColor: 'rgba(99,102,241,0.4)', duration: 0.3, ease: 'power2.out' });
+    gsap.to(e.currentTarget, { y: -6, borderColor: 'rgba(99,102,241,0.35)', duration: 0.3, ease: 'power2.out' });
   };
   const handleMouseLeave = (e) => {
-    gsap.to(e.currentTarget, { y: 0, borderColor: 'rgba(51,65,85,0.5)', duration: 0.4, ease: 'power2.out' });
+    gsap.to(e.currentTarget, { y: 0, borderColor: 'rgba(30,41,59,0.6)', duration: 0.4, ease: 'power2.out' });
   };
 
   return (
     <section id="process" ref={containerRef} className="py-28 bg-slate-950 text-white overflow-hidden">
       <div className="max-w-6xl mx-auto px-4">
+
+        {/* ── Section header ───────────────────────────────────────────────── */}
         <div ref={titleRef} className="mb-16 max-w-xl">
           <span className="text-xs font-bold tracking-widest text-indigo-400 uppercase">How It Works</span>
           <h2 className="text-3xl font-black tracking-tight mt-2 text-white sm:text-4xl">
@@ -94,33 +80,48 @@ export default function ProcessPipeline() {
           </p>
         </div>
 
-        {/* Connecting line (desktop only) */}
-        <div className="hidden md:block relative mb-0 h-0">
-          <div className="absolute top-[52px] left-[calc(12.5%+24px)] right-[calc(12.5%+24px)] h-px bg-slate-800 overflow-hidden">
-            <div
-              ref={lineRef}
-              className="absolute inset-0 origin-left bg-gradient-to-r from-indigo-500 via-sky-400 to-teal-400"
-              style={{ scaleX: 0 }}
-            />
-          </div>
-        </div>
-
-        <div ref={stepsRef} className="grid md:grid-cols-4 gap-6 relative">
+        {/* ── Step cards ───────────────────────────────────────────────────── */}
+        <div ref={stepsRef} className="grid md:grid-cols-4 gap-5">
           {steps.map((step, index) => (
             <div
               key={index}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
-              className="relative group p-6 bg-slate-900/60 border border-slate-800/80 rounded-2xl transition-colors will-change-transform"
+              className="relative group p-7 rounded-2xl will-change-transform overflow-hidden"
+              style={{
+                background: 'rgba(15,23,42,0.7)',
+                border: '1px solid rgba(30,41,59,0.6)',
+                backdropFilter: 'blur(8px)',
+              }}
             >
-              <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-indigo-400/60 to-transparent mb-4 leading-none">
+              {/* Gradient top accent strip */}
+              <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-indigo-500 via-sky-400 to-teal-400" />
+
+              {/* Faint background watermark number */}
+              <div
+                className="absolute -top-3 -right-1 font-black leading-none pointer-events-none select-none"
+                style={{ fontSize: '88px', color: 'rgba(255,255,255,0.025)' }}
+              >
                 {step.num}
               </div>
-              <h3 className="text-base font-bold text-white mb-2">{step.title}</h3>
+
+              {/* Step badge */}
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center mb-5 shadow-lg"
+                style={{
+                  background: 'linear-gradient(135deg, #6366f1, #14b8a6)',
+                  boxShadow: '0 8px 20px -4px rgba(99,102,241,0.35)',
+                }}
+              >
+                <span className="text-white text-sm font-black">{step.num}</span>
+              </div>
+
+              <h3 className="text-base font-bold text-white mb-3">{step.title}</h3>
               <p className="text-slate-400 text-sm leading-relaxed">{step.desc}</p>
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );

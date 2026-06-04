@@ -4,19 +4,26 @@ import { themeConfig, cssGradient, textGradientStyle } from '../config/themeConf
 import { usePluckCMS } from '../hooks/usePluckCMS';
 
 // ── Static fallback content ─────────────────────────────────────────────────
-// Rendered when Pluck CMS is unreachable or baseUrl is still a placeholder.
-// Replace these strings in the CMS dashboard to update copy without a redeploy.
 const STATIC_CONTENT = {
   badge:          'Full-Service Digital Growth Agency',
   headline_line1: 'Stop Paying Agencies That',
   headline_line2: "Can't Show You the ROI.",
-  // description supports raw HTML from the CMS rich-text editor
   description:    `NexusFlow runs your full digital stack — Shopify builds, paid ads, and CRO —
                    with fixed-price proposals, transparent reporting, and a team that owns your
                    results. Get a custom proposal in 24 hours, no commitment required.`,
   cta_primary:    themeConfig.brand.ctaPrimary,
   cta_secondary:  themeConfig.brand.ctaSecondary,
 };
+
+// ── Cycling pain-point phrases for headline line 2 ──────────────────────────
+// First phrase matches headline_line2 above — they stay in sync on first render.
+// Cycles every 6s starting after the entry animation completes (~3.5s delay).
+const CYCLING_LINES = [
+  "Can't Show You the ROI.",
+  "Guess At Your Ad Spend.",
+  "Miss Every Deadline.",
+  "Don't Know Your Numbers.",
+];
 
 const socialProof = [
   { value: '250+', label: 'Projects Delivered' },
@@ -65,6 +72,42 @@ export default function Hero() {
     }, containerRef);
 
     return () => ctx.revert();
+  }, []);
+
+  // ── Cycling headline animation ────────────────────────────────────────────
+  // Starts after the entry animation finishes. Slides line 2 up+out, swaps
+  // text directly in the DOM (no React state = no re-render flicker), then
+  // slides the new phrase in from below.
+  useEffect(() => {
+    let phraseIndex = 0;
+    let intervalId;
+
+    const startDelay = setTimeout(() => {
+      intervalId = setInterval(() => {
+        phraseIndex = (phraseIndex + 1) % CYCLING_LINES.length;
+        const el = line2Ref.current;
+        if (!el) return;
+
+        gsap.to(el, {
+          opacity: 0,
+          y: -28,
+          duration: 0.32,
+          ease: 'power2.in',
+          onComplete: () => {
+            el.textContent = CYCLING_LINES[phraseIndex];
+            gsap.fromTo(el,
+              { opacity: 0, y: 32 },
+              { opacity: 1, y: 0, duration: 0.48, ease: 'power3.out' }
+            );
+          },
+        });
+      }, 6000);
+    }, 3500);
+
+    return () => {
+      clearTimeout(startDelay);
+      clearInterval(intervalId);
+    };
   }, []);
 
   // ── Mouse parallax on orbs ────────────────────────────────────────────────
@@ -161,12 +204,14 @@ export default function Hero() {
           <span ref={line1Ref} className="block">
             {cms.headline_line1}
           </span>
-          <span
-            ref={line2Ref}
-            className="block"
-            style={textGradientStyle(themeConfig.gradients.heroText)}
-          >
-            {cms.headline_line2}
+          <span className="block overflow-hidden" style={{ paddingBottom: '0.08em' }}>
+            <span
+              ref={line2Ref}
+              className="block"
+              style={textGradientStyle(themeConfig.gradients.heroText)}
+            >
+              {cms.headline_line2}
+            </span>
           </span>
         </h1>
 
